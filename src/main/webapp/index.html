@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimisation des trajets de covoiturage</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Leaflet CSS (OpenStreetMap) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🚗 Optimisation des trajets de covoiturage</h1>
+            <p class="subtitle">Gérez et optimisez vos trajets de covoiturage avec OpenStreetMap</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-button active" onclick="showTab('utilisateurs')">👥 Utilisateurs</button>
+            <button class="tab-button" onclick="showTab('vehicules')">🚙 Véhicules</button>
+            <button class="tab-button" onclick="showTab('optimisation')">🎯 Optimisation</button>
+            <button class="tab-button" onclick="showTab('statistiques')">📊 Statistiques</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Tab: Utilisateurs -->
+            <section id="tab-utilisateurs" class="tab-content active">
+                <div class="panel">
+                    <h2>Gestion des utilisateurs</h2>
+                    
+                    <div class="form-container">
+                        <h3>Ajouter un utilisateur</h3>
+                        <form id="form-utilisateur">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nom">Nom *</label>
+                                    <input type="text" id="nom" name="nom" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="groupe">Groupe</label>
+                                    <input type="text" id="groupe" name="groupe" placeholder="Ex: Entreprise A">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="adresseDepart">Adresse de départ *</label>
+                                    <input type="text" id="adresseDepart" name="adresseDepart" 
+                                           placeholder="Ex: 15 Rue de la Paix, Paris" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adresseArrivee">Adresse d'arrivée *</label>
+                                    <input type="text" id="adresseArrivee" name="adresseArrivee" 
+                                           placeholder="Ex: 50 Avenue des Champs-Élysées, Paris" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="heureDepart">Heure de départ</label>
+                                    <input type="time" id="heureDepart" name="heureDepart">
+                                </div>
+                                <div class="form-group">
+                                    <label for="heureArrivee">Heure d'arrivée souhaitée</label>
+                                    <input type="time" id="heureArrivee" name="heureArrivee">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Ajouter l'utilisateur</button>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Liste des utilisateurs</h3>
+                        <table id="table-utilisateurs">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Départ</th>
+                                    <th>Arrivée</th>
+                                    <th>Horaires</th>
+                                    <th>Groupe</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rempli dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Véhicules -->
+            <section id="tab-vehicules" class="tab-content">
+                <div class="panel">
+                    <h2>Gestion des véhicules</h2>
+                    
+                    <div class="form-container">
+                        <h3>Ajouter un véhicule</h3>
+                        <form id="form-vehicule">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="conducteurId">Conducteur *</label>
+                                    <select id="conducteurId" name="conducteurId" required>
+                                        <option value="">Sélectionner un utilisateur</option>
+                                        <!-- Rempli dynamiquement -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="immatriculation">Immatriculation *</label>
+                                    <input type="text" id="immatriculation" name="immatriculation" 
+                                           placeholder="Ex: AB-123-CD" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="capacite">Capacité (places) *</label>
+                                    <input type="number" id="capacite" name="capacite" min="1" max="8" value="4" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="disponible" name="disponible" checked>
+                                        Disponible
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Ajouter le véhicule</button>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Liste des véhicules</h3>
+                        <table id="table-vehicules">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Immatriculation</th>
+                                    <th>Conducteur</th>
+                                    <th>Capacité</th>
+                                    <th>Disponibilité</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rempli dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Optimisation -->
+            <section id="tab-optimisation" class="tab-content">
+                <div class="panel">
+                    <h2>Optimisation des trajets</h2>
+                    
+                    <div class="form-container">
+                        <h3>Créer un trajet optimisé</h3>
+                        <form id="form-optimisation">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="vehiculeId">Véhicule *</label>
+                                    <select id="vehiculeId" name="vehiculeId" required>
+                                        <option value="">Sélectionner un véhicule</option>
+                                        <!-- Rempli dynamiquement -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="algorithme">Algorithme *</label>
+                                    <select id="algorithme" name="algorithme">
+                                        <option value="nearest_neighbor">Plus proche voisin (rapide)</option>
+                                        <option value="simulated_annealing">Recuit simulé (meilleur)</option>
+                                        <option value="compare">🔥 Comparer les deux 🔥</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Sélectionner les passagers *</label>
+                                <div id="passagers-list" class="checkbox-list">
+                                    <!-- Rempli dynamiquement avec les utilisateurs -->
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary btn-large">🎯 Optimiser le trajet</button>
+                                <button type="button" class="btn btn-secondary" onclick="comparerAlgorithmes()">
+                                    📊 Comparer les algorithmes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Carte Google Maps -->
+                    <div class="map-container">
+                        <h3>Visualisation du trajet</h3>
+                        <div id="map"></div>
+                    </div>
+
+                    <!-- Résultats de l'optimisation -->
+                    <div id="resultats-optimisation" class="results-container" style="display: none;">
+                        <h3>Résultats de l'optimisation</h3>
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <div class="result-icon">📏</div>
+                                <div class="result-label">Distance totale</div>
+                                <div class="result-value" id="result-distance">-</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-icon">⏱️</div>
+                                <div class="result-label">Temps total</div>
+                                <div class="result-value" id="result-temps">-</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-icon">👥</div>
+                                <div class="result-label">Passagers</div>
+                                <div class="result-value" id="result-passagers">-</div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-icon">📊</div>
+                                <div class="result-label">Taux de remplissage</div>
+                                <div class="result-value" id="result-taux">-</div>
+                            </div>
+                        </div>
+                        
+                        <div class="ordre-passage">
+                            <h4>Ordre de prise en charge</h4>
+                            <ol id="ordre-utilisateurs">
+                                <!-- Rempli dynamiquement -->
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Statistiques -->
+            <section id="tab-statistiques" class="tab-content">
+                <div class="panel">
+                    <h2>Statistiques globales</h2>
+                    
+                    <div class="stats-grid" id="stats-grid">
+                        <!-- Rempli dynamiquement -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Impact environnemental</h3>
+                        <div class="environmental-stats">
+                            <div class="env-card">
+                                <div class="env-icon">🌍</div>
+                                <div class="env-value" id="env-km">- km</div>
+                                <div class="env-label">Kilomètres économisés</div>
+                            </div>
+                            <div class="env-card">
+                                <div class="env-icon">🌱</div>
+                                <div class="env-value" id="env-co2">- kg</div>
+                                <div class="env-label">CO₂ économisé</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Optimisation des trajets de covoiturage - Projet universitaire</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/maps.js"></script>
+</body>
+</html>
