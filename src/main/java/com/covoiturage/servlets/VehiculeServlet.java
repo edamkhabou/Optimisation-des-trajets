@@ -24,6 +24,8 @@ public class VehiculeServlet extends HttpServlet {
     
     private VehiculeDAO vehiculeDAO;
     private Gson gson;
+
+
     
     @Override
     public void init() throws ServletException {
