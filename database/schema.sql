@@ -155,23 +155,26 @@ FROM (
 ) AS trajets_stats;
 
 -- ============================================
--- DONNÉES DE TEST
+-- DONNÉES DE TEST - TUNISIE
 -- ============================================
 
--- Insertion d'utilisateurs de test
+-- Insertion d'utilisateurs tunisiens de test
 INSERT INTO utilisateurs (nom, adresse_depart, adresse_arrivee, heure_depart, heure_arrivee, groupe, latitude, longitude) VALUES
-('Alice Martin', '15 Rue de la Paix, Paris', '50 Avenue des Champs-Élysées, Paris', '08:00:00', '09:00:00', 'Entreprise A', 48.8698, 2.3322),
-('Bob Dupont', '25 Boulevard Saint-Michel, Paris', '100 Rue de Rivoli, Paris', '08:15:00', '09:15:00', 'Entreprise A', 48.8534, 2.3438),
-('Charlie Rousseau', '30 Rue du Faubourg Saint-Antoine, Paris', '75 Rue de la Pompe, Paris', '08:30:00', '09:30:00', 'Entreprise B', 48.8510, 2.3736),
-('Diana Laurent', '45 Rue de Belleville, Paris', '20 Rue de Vaugirard, Paris', '07:45:00', '08:45:00', 'Entreprise A', 48.8720, 2.3825),
-('Etienne Bernard', '10 Rue Montmartre, Paris', '35 Boulevard Haussmann, Paris', '08:00:00', '09:00:00', 'Entreprise C', 48.8656, 2.3422),
-('Fanny Petit', '60 Rue Saint-Denis, Paris', '90 Rue du Temple, Paris', '08:20:00', '09:20:00', 'Entreprise B', 48.8634, 2.3516);
+('Ahmed Ben Salem', 'Avenue Habib Bourguiba, Tunis', 'Rue de la Liberté, La Marsa', '08:00:00', '09:00:00', 'Entreprise TechnoTunis', 36.8065, 10.1815),
+('Fatma Trabelsi', 'Rue de Marseille, Tunis', 'Avenue Mohamed V, Ariana', '08:15:00', '09:15:00', 'Entreprise TechnoTunis', 36.8189, 10.1658),
+('Mohamed Karoui', 'Boulevard du 7 Novembre, Sfax', 'Avenue Ali Belhouane, Sfax', '08:30:00', '09:30:00', 'Banque Centrale', 34.7406, 10.7603),
+('Leila Jebali', 'Avenue de la République, Sousse', 'Boulevard Yahia Ibn Omar, Sousse', '07:45:00', '08:45:00', 'Entreprise TechnoTunis', 35.8256, 10.6369),
+('Karim Hamdi', 'Rue de la Kasbah, Tunis', 'Avenue Kheireddine Pacha, Le Bardo', '08:00:00', '09:00:00', 'Ministère', 36.8081, 10.1771),
+('Sarra Meddeb', 'Rue Ibn Khaldoun, Tunis', 'Centre Urbain Nord, Tunis', '08:20:00', '09:20:00', 'Banque Centrale', 36.8008, 10.1647),
+('Youssef Gharbi', 'Avenue Farhat Hached, Bizerte', 'Port de Bizerte, Bizerte', '07:30:00', '08:30:00', 'Port Authority', 37.2744, 9.8739),
+('Amira Mansouri', 'Rue de Palestine, Tunis', 'Lac 2, Tunis', '08:10:00', '09:10:00', 'Entreprise TechnoTunis', 36.8129, 10.1817);
 
--- Insertion de véhicules de test
+-- Insertion de véhicules tunisiens de test
 INSERT INTO vehicules (conducteur_id, immatriculation, capacite, heure_debut_disponibilite, heure_fin_disponibilite, disponible) VALUES
-(1, 'AB-123-CD', 4, '07:00:00', '10:00:00', TRUE),
-(3, 'EF-456-GH', 3, '07:30:00', '10:30:00', TRUE),
-(5, 'IJ-789-KL', 5, '07:00:00', '11:00:00', TRUE);
+(1, 'TUN-1234-123', 4, '07:00:00', '10:00:00', TRUE),
+(3, 'TUN-5678-456', 3, '07:30:00', '10:30:00', TRUE),
+(5, 'TUN-9012-789', 5, '07:00:00', '11:00:00', TRUE),
+(7, 'TUN-3456-234', 4, '07:00:00', '10:00:00', TRUE);
 
 -- Insertion de trajets de test
 INSERT INTO trajets (vehicule_id, distance_totale, temps_total_minutes, optimise) VALUES
